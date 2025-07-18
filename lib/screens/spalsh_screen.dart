@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..forward();
-
+// add this comment to test changed
     _ctrl.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Navigator.pushReplacement(
