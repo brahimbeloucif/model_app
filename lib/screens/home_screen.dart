@@ -28,85 +28,117 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.asset('assets/video/video.mp4')
+    _controller = VideoPlayerController.asset('assets/video/output_compressed.mp4')
       ..initialize().then((value) {
         setState(() {
           _controller.play();
         });
-      });
-    // !!  set this to auto loop video play       })..setLooping(true);
+      })
+      ..setLooping(true);
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        
-        title: 'Runway',
-        prefixIcon: 'assets/svgs/menu.svg',
-        suffixIcon: 'assets/svgs/notification.svg',
-      ),
-      body: Stack(
-        children: [
-          Expanded(
-            child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controller),
-            ),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: CustomAppBar(
+      title: 'Runway',
+     
+      prefixIcon: 'assets/svgs/menu.svg',
+      suffixIcon: 'assets/svgs/notification.svg',
+    ),
+    body: Stack(
+      children: [
+        // Video background - keeps original aspect ratio
+        Transform.translate(
+          offset: Offset(0, -70), // Move video up by 20 pixels
+          child: Center(
+            child: _controller.value.isInitialized
+                ? AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  )
+                : Container(color: Colors.black),
           ),
-
-          // ! categories
-          Positioned(
-            bottom: 0,
-            right: 0,
-            left: 0,
+        ),
+        
+        // Categories overlay at the bottom
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 90, // Move categories up by 20 pixels from bottom
+          child: SafeArea(
+            top: false,
             child: Container(
               width: double.infinity,
-              height: 240,
-              decoration: BoxDecoration(color: Colors.white),
-
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Gap(10),
-                    CustomText.defStyle(
-                      txt: 'Categories',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      physics: BouncingScrollPhysics(),
-                      child: Row(
-                        children: List.generate(category.length, (index) {
-                          final item = category[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: GestureDetector(
-                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c)=>CategoryScreen())),
-                              child: Column(
-                                children: [
-                                  Image.asset(item.img,width: 75,),
-                              
-                                  Gap(10),
-                                  CustomText.defStyle(txt: item.label),
-                                ],
-                              ),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white, // Semi-transparent
+ 
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomText.defStyle(
+                    txt: 'Categories',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  Gap(8),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
+                    child: Row(
+                      children: List.generate(category.length, (index) {
+                        final item = category[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (c) => CategoryScreen()),
                             ),
-                          );
-                        }),
-                      ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 4,
+                                        offset: Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: Image.asset(
+                                      item.img,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Gap(6),
+                                CustomText.defStyle(
+                                  txt: item.label,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
+        ),
+      ],
+    ),
+  );
+}}
