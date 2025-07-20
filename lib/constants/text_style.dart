@@ -62,12 +62,13 @@ class CustomText {
     int? maxLines,
   }) {
     return defStyle(
+      overflow: TextOverflow.ellipsis,
       txt: txt,
       fontSize: 14,
       fontWeight: FontWeight.normal,
       color: color,
       textAlign: textAlign,
-      maxLines: maxLines,
+      maxLines: maxLines ??1,
     );
   }
 }
