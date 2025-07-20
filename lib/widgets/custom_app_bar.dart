@@ -8,14 +8,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     required this.prefixIcon,
     required this.suffixIcon,
+     this.elevation,
+     this.color,
+     this.height,
+
   });
   final String title, prefixIcon, suffixIcon;
+  final double ?elevation ;
+  final double ? height ;
+  final Color ?color;
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(height??80);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      scrolledUnderElevation: 0,
+      backgroundColor: color,
+      elevation: elevation,
       toolbarHeight: preferredSize.height,
       leading: SizedBox.shrink(),
       leadingWidth: 0,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- import 'package:model_app/screens/spalsh_screen.dart';
+import 'package:model_app/screens/category_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Model',
-      home: const SplashScreen(),
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      home:  CategoryScreen(),
     );
   }
 }
